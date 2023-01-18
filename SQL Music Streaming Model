@@ -1,0 +1,101 @@
+create  database spotifydatabase;
+USE SpotifyDatabase;
+
+CREATE TABLE Album_T (
+    Album_ID int NOT NULL,
+    album_name varchar(50) NOT NULL,
+    date_published date NOT NULL,
+    CONSTRAINT Album_T_pk PRIMARY KEY (Album_ID)
+);
+
+
+CREATE TABLE Artist_T (
+    Artist_ID int NOT NULL,
+    artist_name varchar(50) NOT NULL,
+    CONSTRAINT Artist_T_pk PRIMARY KEY (Artist_ID)
+);
+
+
+CREATE TABLE Membership_T (
+    Member_ID int NOT NULL,
+    start_date date NOT NULL,
+    expire_date date NOT NULL,
+    member_level varchar(25) NOT NULL,
+    billing varchar(50) NOT NULL,
+    UserID int NOT NULL,
+    CONSTRAINT Membership_T_pk PRIMARY KEY (Member_ID)
+);
+
+
+CREATE TABLE PlaylistSongs_T (
+    Playlist_ID int NOT NULL,
+    Song_ID int NOT NULL,
+    CONSTRAINT PlaylistSongs_T_pk PRIMARY KEY (Playlist_ID)
+);
+
+
+CREATE TABLE Song_T (
+    Song_ID int NOT NULL,
+    song_title varchar(50) NOT NULL,
+    genre varchar(50) NOT NULL,
+    length time NOT NULL,
+    CONSTRAINT Song_T_pk PRIMARY KEY (Song_ID)
+);
+
+
+CREATE TABLE SongsBy_T (
+    Song_ID int NOT NULL,
+    Artist_ID int NOT NULL,
+    Album_ID int NOT NULL,
+    CONSTRAINT SongsBy_T_pk PRIMARY KEY (Song_ID,Artist_ID,Album_ID)
+);
+
+-- Table: UserPlaylist_T
+CREATE TABLE UserPlaylist_T (
+    Playlist_ID int NOT NULL,
+    playlist_name varchar(50) NOT NULL,
+    UserID int NOT NULL,
+    CONSTRAINT UserPlaylist_T_pk PRIMARY KEY (Playlist_ID)
+);
+
+
+CREATE TABLE User_T (
+    User_ID int NOT NULL,
+    first_name int NOT NULL,
+    last_name int NOT NULL,
+    email varchar(100) NOT NULL,
+    CONSTRAINT User_T_pk PRIMARY KEY (User_ID)
+);
+
+-- foreign keys
+-- Reference: PlaylistSongs_Song (table: PlaylistSongs_T)
+ALTER TABLE PlaylistSongs_T ADD CONSTRAINT PlaylistSongs_Song FOREIGN KEY PlaylistSongs_Song (Song_ID)
+    REFERENCES Song_T (Song_ID);
+
+-- Reference: PlaylistSongs_UserPlaylist (table: PlaylistSongs_T)
+ALTER TABLE PlaylistSongs_T ADD CONSTRAINT PlaylistSongs_UserPlaylist FOREIGN KEY PlaylistSongs_UserPlaylist (Playlist_ID)
+    REFERENCES UserPlaylist_T (Playlist_ID);
+
+-- Reference: SongsBy_Album (table: SongsBy_T)
+ALTER TABLE SongsBy_T ADD CONSTRAINT SongsBy_Album FOREIGN KEY SongsBy_Album (Album_ID)
+    REFERENCES Album_T (Album_ID);
+
+-- Reference: SongsBy_Artist (table: SongsBy_T)
+ALTER TABLE SongsBy_T ADD CONSTRAINT SongsBy_Artist FOREIGN KEY SongsBy_Artist (Artist_ID)
+    REFERENCES Artist_T (Artist_ID);
+
+-- Reference: SongsBy_Song (table: SongsBy_T)
+ALTER TABLE SongsBy_T ADD CONSTRAINT SongsBy_Song FOREIGN KEY SongsBy_Song (Song_ID)
+    REFERENCES Song_T (Song_ID);
+
+-- Reference: UserPlaylist_User (table: UserPlaylist_T)
+ALTER TABLE UserPlaylist_T ADD CONSTRAINT UserPlaylist_User FOREIGN KEY UserPlaylist_User (UserID)
+    REFERENCES User_T (User_ID);
+
+-- Reference: User_Membership (table: Membership_T)
+ALTER TABLE Membership_T ADD CONSTRAINT User_Membership FOREIGN KEY User_Membership (UserID)
+    REFERENCES User_T (User_ID);
+    
+    
+
+
